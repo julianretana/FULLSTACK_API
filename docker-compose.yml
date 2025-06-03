@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  client:
+    build: ./Client
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  server:
+    build: ./Server
+    ports:
+      - "3006:3006"
+
+    env_file: ./Server/.env
+    environment:
+      NODE_ENV: development
+      DB_URL: ${DB_URL}
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
